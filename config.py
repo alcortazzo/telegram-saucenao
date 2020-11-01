@@ -4,7 +4,7 @@ from enum import Enum
 tgBotToken = '1237564925:AAFaS1k8MKAjEo60QrE8rcCxyBYwkRyszLU'
 api_key = "427366b5e50ddf04869a914ad94224a2dec7f38c"
 output_type = '2'
-numres = 5
+numres = 1
 minsim ='70!'
 dbmask = 8589938016
 

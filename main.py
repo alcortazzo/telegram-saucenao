@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Made by @alcortazzo
-# v0.1-beta
+# v0.2-beta
 
 import io
 import os
@@ -153,16 +153,86 @@ def work_with_photo(message):
                         sendResults(message, r.json())
 
     def sendResults(message, result):
+        '''
         i = 1
         while i <= config.numres:
             result_case = result['results'][i - 1]
             result_name = result['results'][i - 1]['data']['title']
             result_picture = result['results'][i - 1]['header']['thumbnail']
-            result_similarity = result['results'][i -
-                                                  1]['header']['similarity']
+            result_similarity = result['results'][i - 1]['header']['similarity']
 
             bot.send_message(message.chat.id, f'<a href="{result_picture}"> </a>Result ({i} of {config.numres}): {result_name}\n' +
                              f'Similarity = {result_similarity}%', parse_mode='HTML')
+            i = i + 1
+        '''
+        i = 1
+        while i <= config.numres:
+            try:
+                result_case = result['results'][i - 1]
+            except:
+                result_case = ''
+                
+            try:
+                result_name = result['results'][i - 1]['data']['source']
+            except:
+                try:
+                    result_name = result['results'][i - 1]['data']['title']
+                except:
+                    result_name = ''
+                
+            try:
+                result_part = result['results'][i - 1]['data']['part']
+            except:
+                result_part = ''
+                
+            try:
+                result_year = result['results'][i - 1]['data']['year']
+            except:
+                result_year = ''
+                
+            try:
+                result_time = result['results'][i - 1]['data']['est_time']
+            except:
+                result_time = ''
+                
+            try:
+                result_url = result['results'][i - 1]['data']['ext_urls'][0]
+            except:
+                result_url = ''
+                
+            try:
+                result_picture = result['results'][i - 1]['header']['thumbnail']
+            except:
+                result_picture = ''
+                
+            try:
+                result_similarity = result['results'][i - 1]['header']['similarity']
+            except:
+                result_similarity = ''
+                
+            try:
+                message_text = ''
+                if result_name != '':
+                    message_text = message_text + f'<b>{result_name}</b>\n\n'
+                if result_part != '':
+                    message_text = message_text + f'<b>Part:</b> {result_part}\n'
+                if result_year != '':
+                    message_text = message_text + f'<b>Year:</b> {result_year}\n'
+                if result_time != '':
+                    message_text = message_text + f'<b>Time:</b> {result_time}\n\n'
+                if result_url != '':
+                    if 'anidb' in result_url.lower():
+                        message_text = message_text + f'<a href="{result_url}"><b>Anidb</b></a>'
+                    else:
+                        message_text = message_text + f'<a href="{result_url}"><b>url1</b></a>'
+            except:
+                x = 0
+            
+            try:
+                bot.send_message(message.chat.id, message_text, parse_mode='HTML')
+            except:
+                x = 0
+            
             i = i + 1
         clearTemp(message)
 
@@ -175,43 +245,43 @@ def work_with_photo(message):
 
 def getBitmask():
     # enable or disable indexes
-    index_hmags = '0'
-    index_reserved = '0'
-    index_hcg = '0'
-    index_ddbobjects = '0'
-    index_ddbsamples = '0'
+    index_hmags = '1'
+    index_reserved = '1'
+    index_hcg = '1'
+    index_ddbobjects = '1'
+    index_ddbsamples = '1'
     index_pixiv = '1'
     index_pixivhistorical = '1'
-    index_reserved = '0'
+    index_reserved = '1'
     index_seigaillust = '1'
-    index_danbooru = '0'
+    index_danbooru = '1'
     index_drawr = '1'
     index_nijie = '1'
-    index_yandere = '0'
-    index_animeop = '0'
-    index_reserved = '0'
-    index_shutterstock = '0'
-    index_fakku = '0'
-    index_hmisc = '0'
-    index_2dmarket = '0'
-    index_medibang = '0'
-    index_anime = '0'
-    index_hanime = '0'
-    index_movies = '0'
-    index_shows = '0'
-    index_gelbooru = '0'
-    index_konachan = '0'
-    index_sankaku = '0'
-    index_animepictures = '0'
-    index_e621 = '0'
-    index_idolcomplex = '0'
-    index_bcyillust = '0'
-    index_bcycosplay = '0'
-    index_portalgraphics = '0'
+    index_yandere = '1'
+    index_animeop = '1'
+    index_reserved = '1'
+    index_shutterstock = '1'
+    index_fakku = '1'
+    index_hmisc = '1'
+    index_2dmarket = '1'
+    index_medibang = '1'
+    index_anime = '1'
+    index_hanime = '1'
+    index_movies = '1'
+    index_shows = '1'
+    index_gelbooru = '1'
+    index_konachan = '1'
+    index_sankaku = '1'
+    index_animepictures = '1'
+    index_e621 = '1'
+    index_idolcomplex = '1'
+    index_bcyillust = '1'
+    index_bcycosplay = '1'
+    index_portalgraphics = '1'
     index_da = '1'
-    index_pawoo = '0'
-    index_madokami = '0'
-    index_mangadex = '0'
+    index_pawoo = '1'
+    index_madokami = '1'
+    index_mangadex = '1'
 
     db_bitmask = int(index_mangadex+index_madokami+index_pawoo+index_da+index_portalgraphics+index_bcycosplay+index_bcyillust+index_idolcomplex+index_e621+index_animepictures+index_sankaku+index_konachan+index_gelbooru+index_shows+index_movies+index_hanime+index_anime+index_medibang +
                      index_2dmarket+index_hmisc+index_fakku+index_shutterstock+index_reserved+index_animeop+index_yandere+index_nijie+index_drawr+index_danbooru+index_seigaillust+index_anime+index_pixivhistorical+index_pixiv+index_ddbsamples+index_ddbobjects+index_hcg+index_hanime+index_hmags, 2)
