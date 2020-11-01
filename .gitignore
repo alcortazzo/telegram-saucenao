@@ -1,0 +1,9 @@
+.vscode
+*test*
+*.jpg
+*.png
+*.jpeg
+*.json
+media/
+*.db
+__pycache__/
