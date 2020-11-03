@@ -32,81 +32,37 @@ print('bot starts...')
 
 bot = TeleBot(config.tgBotToken)
 
-'''
-keyboard = types.ReplyKeyboardMarkup(True)
-keyboard.row('Фото', 'Видео')
-hideBoard = types.ReplyKeyboardRemove()
-'''
-
 
 @bot.message_handler(commands=['start'])
 def cmd_start(message):
-    '''def AddUserDB(message):
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-
-        # Add new user to DB
-        # if data exist user has banned bot
-        sql_select = f'SELECT * FROM users where chatid={message.chat.id}'
-        sql_insert = f"INSERT INTO users VALUES ({message.chat.id}, '{''}', '{''}', '{''}', {0})"
-        cursor.execute(sql_select)
-        data = cursor.fetchone()
-        if data is None:
-            cursor.execute(sql_insert)
-            conn.commit()
-        conn.close()'''
-
     def SendMessages(message):
         bot.send_message(message.chat.id,
                          # request for tgChannel value
-                         # 'Я ищу сорс аниме тайтлов по фото или видео. Что ты хочешь мне отправить?', reply_markup=keyboard)
-                         'Я ищу сорс аниме тайтлов по фото или видео. Что ты хочешь мне отправить?')
-        # bot.send_photo(message.chat.id, open('img/img_permissions_white.png', 'rb'),
-        #                caption='И не забудь сделать меня администратором канала с разрешением отправлять в него сообщения!')
+                         'This <a href="https://github.com/alcortazzo/telegram-saucenao"><b>open source</b></a> \
+                            bot provides you with an interface to use <a href="https://saucenao.com/"><b>SauceNAO</b></a>`s ' +
+                         "reverse image search engine. Send me an image and I'll try to reverse search using the SauceNAO API", parse_mode='HTML', disable_web_page_preview=True)
 
     def SetState(message):
         config.set_state(message.chat.id, config.States.S_REQUEST_Media.value)
 
-    # AddUserDB(message)
     SendMessages(message)
     SetState(message)
 
 
 @bot.message_handler(commands=['reset'])
 def cmd_reset(message):
-    '''def ResetUserData(message):
-        # Delete data for user from DB
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-        # cursor.fetchone()
-        cursor.execute('DELETE FROM users WHERE chatid = {}'.format(message.chat.id))
-        cursor.execute("INSERT INTO users VALUES ({}, '{}', '{}', '{}', {})".format(message.chat.id, '', '', '', 0))
-        conn.commit()
-        conn.close()'''
-
     def SendMessages(message):
         bot.send_message(message.chat.id,
-                         'Снова здравствуй!\n\nТвои данные были удалены из базы данных, поскольку ты перезапустил бота.')
-        bot.send_message(message.chat.id,
-                         # 'Привет. Я ищу сорс аниме тайтлов по фото или видео. Что ты хочешь мне отправить?', reply_markup=hideBoard)
-                         'Привет. Я ищу сорс аниме тайтлов по фото или видео. Что ты хочешь мне отправить?')
-        # bot.send_photo(message.chat.id, open('img/img_permissions_white.png', 'rb'),
-        #                caption='И не забудь сделать меня администратором канала с разрешением отправлять в него сообщения!')
+                         # request for tgChannel value
+                         'This <a href="https://github.com/alcortazzo/telegram-saucenao"><b>open source</b></a> \
+                            bot provides you with an interface to use <a href="https://saucenao.com/"><b>SauceNAO</b></a>`s ' +
+                         "reverse image search engine. Send me an image and I'll try to reverse search using the SauceNAO API", parse_mode='HTML', disable_web_page_preview=True)
 
     def SetState(message):
         config.set_state(message.chat.id, config.States.S_REQUEST_Media.value)
 
-    # ResetUserData(message)
     SendMessages(message)
     SetState(message)
-
-
-'''
-@bot.message_handler(content_types=['text'])
-def send_text(message):
-    if message.text.lower() == 'фото':
-        bot.send_message(message.chat.id, 'Хорошо. Кидай фотку')
-'''
 
 
 @bot.message_handler(content_types=['photo'])
@@ -149,7 +105,7 @@ def work_with_photo(message):
 
                         processResults = True
                         r = requests.post(url, files=files)
-                        print(r.json())
+                        print(f'{message.chat.id} id got the result')
                         sendResults(message, r.json())
 
     def sendResults(message, result):
