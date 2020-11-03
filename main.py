@@ -219,12 +219,14 @@ def work_with_photo(message):
                 if result_year != '':
                     message_text = message_text + f'<b>Year:</b> {result_year}\n'
                 if result_time != '':
-                    message_text = message_text + f'<b>Time:</b> {result_time}\n\n'
+                    message_text = message_text + f'<b>Time:</b> {result_time}\n'
+                if result_similarity != '':
+                    message_text = message_text + f'<b>Similarity:</b> {result_similarity}%\n\n'
                 if result_url != '':
                     if 'anidb' in result_url.lower():
                         message_text = message_text + f'<a href="{result_url}"><b>Anidb</b></a>'
                     else:
-                        message_text = message_text + f'<a href="{result_url}"><b>url1</b></a>'
+                        message_text = message_text + f'<a href="{result_url}"><b>url</b></a>'
             except:
                 x = 0
             

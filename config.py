@@ -1,8 +1,8 @@
 import sqlite3
 from enum import Enum
 
-tgBotToken = '1237564925:AAFaS1k8MKAjEo60QrE8rcCxyBYwkRyszLU'
-api_key = "427366b5e50ddf04869a914ad94224a2dec7f38c"
+tgBotToken = 'YOUR TOKEN'  # bot token from t.me/BotFather
+api_key = "YOUR ANOTHER TOKEN"  # another token from saucenao.com
 output_type = '2'
 numres = 1
 minsim ='70!'
