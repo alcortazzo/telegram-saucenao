@@ -38,9 +38,11 @@ def cmd_start(message):
     def SendMessages(message):
         bot.send_message(message.chat.id,
                          # request for tgChannel value
-                         'This <a href="https://github.com/alcortazzo/telegram-saucenao"><b>open source</b></a> \
-                            bot provides you with an interface to use <a href="https://saucenao.com/"><b>SauceNAO</b></a>`s ' +
-                         "reverse image search engine. Send me an image and I'll try to reverse search using the SauceNAO API", parse_mode='HTML', disable_web_page_preview=True)
+                         'This <a href="https://github.com/alcortazzo/telegram-saucenao"><b>open source</b></a>' +
+                         ' bot provides you with an interface to use <a href="https://saucenao.com/"><b>SauceNAO</b></a>`s ' +
+                         "reverse image search engine. Send me an image and I'll try to reverse search using the SauceNAO API",
+                         parse_mode='HTML',
+                         disable_web_page_preview=True)
 
     def SetState(message):
         config.set_state(message.chat.id, config.States.S_REQUEST_Media.value)
@@ -54,9 +56,11 @@ def cmd_reset(message):
     def SendMessages(message):
         bot.send_message(message.chat.id,
                          # request for tgChannel value
-                         'This <a href="https://github.com/alcortazzo/telegram-saucenao"><b>open source</b></a> \
-                            bot provides you with an interface to use <a href="https://saucenao.com/"><b>SauceNAO</b></a>`s ' +
-                         "reverse image search engine. Send me an image and I'll try to reverse search using the SauceNAO API", parse_mode='HTML', disable_web_page_preview=True)
+                         'This <a href="https://github.com/alcortazzo/telegram-saucenao"><b>open source</b></a>' +
+                         ' bot provides you with an interface to use <a href="https://saucenao.com/"><b>SauceNAO</b></a>`s ' +
+                         "reverse image search engine. Send me an image and I'll try to reverse search using the SauceNAO API",
+                         parse_mode='HTML',
+                         disable_web_page_preview=True)
 
     def SetState(message):
         config.set_state(message.chat.id, config.States.S_REQUEST_Media.value)
