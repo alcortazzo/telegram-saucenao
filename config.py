@@ -11,10 +11,6 @@ dbmask = 8589938016
 class States(Enum):
     S_START = 0
     S_REQUEST_Media = 1
-    #S_REQUEST_tgChannel = 1
-    S_REQUEST_vkDomain = 2
-    S_REQUEST_vkToken = 3
-    S_REQUEST_confirmation = 4
 
 def set_state(user_id, value):
     conn = sqlite3.connect('states.db')
