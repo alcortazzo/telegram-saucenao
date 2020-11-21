@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Made by @alcortazzo
-# v0.3
+# v0.4
 
 import io
 import os
@@ -43,8 +43,8 @@ bot = TeleBot(config.tgBotToken)
 
 @bot.message_handler(commands=['start'])
 def cmd_start(message):
-    try:
-        def SendMessages(message):
+    def SendMessages():
+        try:
             bot.send_message(message.chat.id,
                              # request for tgChannel value
                              'This <a href="https://github.com/alcortazzo/telegram-saucenao"><b>open source</b></a>' +
@@ -54,23 +54,29 @@ def cmd_start(message):
                              disable_web_page_preview=True)
             bot.send_message(message.chat.id, "<b>Send me an image and I'll try to reverse search using the SauceNAO API</b>", parse_mode='HTML')
             addLog('i', f'Welcome new user [id:{message.chat.id}]')
-    except Exception as ex:
-        addLog('e', f'Something [{type(ex).__name__}] went wrong in cmd_start() [id:{message.chat.id}]: {str(ex)}')
-    try:
-        def SetState(message):
+        except Exception as ex:
+            if type(ex).__name__ == 'ConnectionError':
+                addLog('w', f'{type(ex).__name__} went wrong in cmd_start() --> SendMessages() [id:{message.chat.id}]: {str(ex)}')
+                addLog('i', 'Bot trying to resend message to user')
+                time.sleep(3)
+                SendMessages()
+            addLog('e', f'Something [{type(ex).__name__}] went wrong in cmd_start() --> SendMessages() [id:{message.chat.id}]: {str(ex)}')
+            
+    def SetState():
+        try:
             config.set_state(
                 message.chat.id, config.States.S_REQUEST_Media.value)
-    except Exception as ex:
-        addLog('e', f'Something [{type(ex).__name__}] went wrong in cmd_start() --> SetState() [id:{message.chat.id}]: {str(ex)}')
+        except Exception as ex:
+            addLog('e', f'Something [{type(ex).__name__}] went wrong in cmd_start() --> SetState() [id:{message.chat.id}]: {str(ex)}')
 
-    SendMessages(message)
-    SetState(message)
+    SendMessages()
+    SetState()
 
 
 @bot.message_handler(commands=['reset'])
 def cmd_reset(message):
-    try:
-        def SendMessages(message):
+    def SendMessages():
+        try:
             bot.send_message(message.chat.id,
                              # request for tgChannel value
                              'This <a href="https://github.com/alcortazzo/telegram-saucenao"><b>open source</b></a>' +
@@ -80,24 +86,29 @@ def cmd_reset(message):
                              disable_web_page_preview=True)
             bot.send_message(message.chat.id, "<b>Send me an image and I'll try to reverse search using the SauceNAO API</b>", parse_mode='HTML')
             addLog('i', f'User restarted bot [id:{message.chat.id}]')
-    except Exception as ex:
-        addLog('e', f'Something [{type(ex).__name__}] went wrong in cmd_reset() [id:{message.chat.id}]: {str(ex)}')
+        except Exception as ex:
+            if type(ex).__name__ == 'ConnectionError':
+                addLog('w', f'{type(ex).__name__} went wrong in cmd_reset() --> SendMessages() [id:{message.chat.id}]: {str(ex)}')
+                addLog('i', 'Bot trying to resend message to user')
+                time.sleep(3)
+                SendMessages()
+            addLog('e', f'Something [{type(ex).__name__}] went wrong in cmd_reset() --> SendMessages() [id:{message.chat.id}]: {str(ex)}')
 
-    try:
-        def SetState(message):
+    def SetState():
+        try:
             config.set_state(
                 message.chat.id, config.States.S_REQUEST_Media.value)
-    except Exception as ex:
-        addLog('e', f'Something [{type(ex).__name__}] went wrong in cmd_reset() --> SetState() [id:{message.chat.id}]: {str(ex)}')
+        except Exception as ex:
+            addLog('e', f'Something [{type(ex).__name__}] went wrong in cmd_reset() --> SetState() [id:{message.chat.id}]: {str(ex)}')
 
-    SendMessages(message)
-    SetState(message)
+    SendMessages()
+    SetState()
 
 
 @bot.message_handler(content_types=['photo'])
 def work_with_photo(message):
-    try:
-        def getPhoto(message):
+    def getPhoto():
+        try:
             fileID = message.photo[-1].file_id
             file_info = bot.get_file(fileID)
             downloaded_file = bot.download_file(file_info.file_path)
@@ -111,11 +122,11 @@ def work_with_photo(message):
             with open(f"media/{message.chat.id}/image.jpg", 'wb') as new_file:
                 new_file.write(downloaded_file)
             addLog('i', f'Media downloaded for [id:{message.chat.id}]')
-            getData(message)
-    except Exception as ex:
-        addLog('e', f'Something [{type(ex).__name__}] went wrong in work_with_photo() [id:{message.chat.id}]: {str(ex)}')
+            getData()
+        except Exception as ex:
+            addLog('e', f'Something [{type(ex).__name__}] went wrong in work_with_photo() [id:{message.chat.id}]: {str(ex)}')
     
-    def getData(message):
+    def getData():
         try:
             extensions = {".jpg", ".jpeg", ".png"}
             thumbSize = (250, 250)
@@ -222,26 +233,33 @@ def work_with_photo(message):
                 except:
                     x = 0
                 
-                try:
-                    bot.send_message(message.chat.id, message_text, parse_mode='HTML')
-                    addLog('i', f'Result sent to user [id:{message.chat.id}]: Name: "{result_name}, Similarity:{result_similarity}"')
-                except Exception as ex:
-                    addLog('e', f'User does not get results because something [{type(ex).__name__}] went wrong: {ex}')
+                def send_result():
+                    try:
+                        bot.send_message(message.chat.id, message_text, parse_mode='HTML')
+                        addLog('i', f'Result sent to user [id:{message.chat.id}].\nName: "{result_name}, Similarity: {result_similarity}%"')
+                    except Exception as ex:
+                        if type(ex).__name__ == 'ConnectionError':
+                            addLog('w', f'{type(ex).__name__} went wrong in sendResults() --> send_result() [id:{message.chat.id}]: {str(ex)}')
+                            addLog('i', 'Bot trying to resend message to user')
+                            time.sleep(3)
+                            send_result()
+                        addLog('e', f'User does not get results because something [{type(ex).__name__}] went wrong in sendResults() --> send_result(): {ex}')
                 
+                send_result()
                 i = i + 1
-            clearTemp(message)
+            clearTemp()
         except Exception as ex:
             addLog('e', f'Something [{type(ex).__name__}] went wrong in sendResults() [id:{message.chat.id}]: {str(ex)}')
 
-    def clearTemp(message):
+    def clearTemp():
         try:
             if os.path.isdir(f'media/{message.chat.id}'):
                 shutil.rmtree(f'media/{message.chat.id}')
-                addLog('i', f'[media/{message.chat.id}] folder has been removed')
+                addLog('i', f'[./media/{message.chat.id}/] folder has been removed')
         except Exception as ex:
             addLog('e', f'Something [{type(ex).__name__}] went wrong in clearTemp() [id:{message.chat.id}]: {str(ex)}')
     
-    getPhoto(message)
+    getPhoto()
 
 
 def getBitmask():
@@ -313,16 +331,16 @@ def infinity_polling_start():
 
 
 def create_table(type_of_table):
-    try:
-        def create_table_states():
+    def create_table_states():
+        try:
             conn = sqlite3.connect('states.db')
             cursor = conn.cursor()
             conn.execute(
                 '''CREATE TABLE IF NOT EXISTS states (user_id INTEGER, state INTEGER)''')
             conn.commit()
             conn.close()
-    except Exception as ex:
-            addLog('e', f'Something [{type(ex).__name__}] went wrong in create_table(): {str(ex)}')
+        except Exception as ex:
+                addLog('e', f'Something [{type(ex).__name__}] went wrong in create_table(): {str(ex)}')
 
     if type_of_table == 'states':
         create_table_states()
@@ -332,6 +350,12 @@ if __name__ == '__main__':
     logging.getLogger('requests').setLevel(logging.CRITICAL)
     logging.basicConfig(format='[%(asctime)s] %(filename)s:%(lineno)d %(levelname)s - %(message)s',
                         level=logging.INFO, filename='bot.log', datefmt='%d.%m.%Y %H:%M:%S')
-    if not os.path.isfile('states.db'):
-        create_table('states')
-    infinity_polling_start()
+    while True:
+        if not os.path.isfile('states.db'):
+            create_table('states')
+        #infinity_polling_start()
+        try:
+            bot.polling(none_stop=True)
+        except Exception as ex:
+            addLog('e', f'Something [{type(ex).__name__}] went wrong in bot.polling(): {str(ex)}')
+            time.sleep(5)
