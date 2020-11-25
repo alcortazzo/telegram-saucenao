@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Made by @alcortazzo
-# v0.4
+# v0.4.1
 
 import io
 import os
@@ -124,7 +124,12 @@ def work_with_photo(message):
             addLog('i', f'Media downloaded for [id:{message.chat.id}]')
             getData()
         except Exception as ex:
-            addLog('e', f'Something [{type(ex).__name__}] went wrong in work_with_photo() [id:{message.chat.id}]: {str(ex)}')
+            if type(ex).__name__ == 'ConnectionError':
+                addLog('w', f'{type(ex).__name__} went wrong in work_with_photo() --> getPhoto() [id:{message.chat.id}]: {str(ex)}')
+                addLog('i', 'Bot trying to resend message to user')
+                time.sleep(3)
+                getPhoto()
+            addLog('e', f'Something [{type(ex).__name__}] went wrong in work_with_photo() --> getPhoto() [id:{message.chat.id}]: {str(ex)}')
     
     def getData():
         try:
