@@ -2,30 +2,20 @@
 # -*- coding: utf-8 -*-
 
 # Made by @alcortazzo
-# v0.4.1
+# v0.4.2
 
 import io
 import os
-import re
-import sys
 import time
 import json
-import urllib
 import config
 import shutil
-import codecs
 import logging
 import sqlite3
 import requests
-import eventlet
-import unicodedata
 from PIL import Image
 from datetime import datetime
-from collections import OrderedDict
 from telebot import TeleBot, types, apihelper
-
-#sys.stdout = codecs.getwriter('utf8')(sys.stdout.detach())
-#sys.stderr = codecs.getwriter('utf8')(sys.stderr.detach())
 
 
 print('\n\n   /$$$$$$                                          /$$   /$$  /$$$$$$   /$$$$$$ \n',
