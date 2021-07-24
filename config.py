@@ -1,7 +1,7 @@
 tgBotToken = "TELEGRAM BOT TOKEN"  # bot token from t.me/BotFather
 saucenao_tkn = "SAUCENAO TOKEN"  # saucenao token from saucenao.com
 output_type = "2"
-numres = 3
+numres = 10
 minsim = "70!"
 
 dbmask = 34359738367  # set dbmask = "" if you want to configure bits manually
@@ -44,9 +44,3 @@ bits = {
     "index_madokami": "1",
     "index_mangadex": "1",
 }
-
-bitmask = ""
-for bit in bits:
-    bitmask += bits[bit]
-print(bitmask)
-print(int(bitmask, 2))

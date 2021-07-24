@@ -41,7 +41,7 @@ class ApiRequest:
         if "results" in result and len(result["results"]) >= 1:
             for case in result["results"]:
                 # name = part = year = time = url = pic = sim = char = mat = ""
-                url_data = ["url", "source", "similarity"]
+                url_data = {"url": "", "source": "", "similarity": ""}
 
                 if "source" in case["data"] and not name:
                     name = case["data"]["source"]
@@ -55,7 +55,7 @@ class ApiRequest:
                     time = case["data"]["est_time"]
                 if "ext_urls" in case["data"]:
                     # url = case["data"]["ext_urls"][0]
-                    url_data[0] = case["data"]["ext_urls"][0]
+                    url_data["url"] = case["data"]["ext_urls"][0]
                 # if "characters" in case["data"]:
                 #    char = case["data"]["characters"]
                 # if "material" in case["data"]:
@@ -64,11 +64,11 @@ class ApiRequest:
                 #    pic = case["header"]["thumbnail"]
                 if "similarity" in case["header"]:
                     # sim = case["header"]["similarity"]
-                    url_data[2] = case["header"]["similarity"]
+                    url_data["similarity"] = case["header"]["similarity"]
 
                 for source in sources:
                     if sources[source] in case["data"]:
-                        url_data[1] = source
+                        url_data["source"] = source
 
                 urls.append(url_data)
             data = {

@@ -43,11 +43,15 @@ def msg_media(message):
         markup = types.InlineKeyboardMarkup()
         buttons = []
         for url in result["urls"]:
-            buttons.append(
-                types.InlineKeyboardButton(text=f"{url[1]} - {url[2]}%", url=url[0])
-            )
+            if url["url"] and url["source"] and url["similarity"]:
+                buttons.append(
+                    types.InlineKeyboardButton(
+                        text=f"{url['source']} - {url['similarity']}%", url=url["url"]
+                    )
+                )
         markup.add(buttons[0])
-        markup.row(buttons[1], buttons[2])
+        if len(buttons) > 1:
+            markup.row(buttons[1], buttons[2])
 
         bot.send_message(
             message.chat.id,
@@ -57,16 +61,21 @@ def msg_media(message):
             reply_to_message_id=message.id,
         )
 
-    bot.send_chat_action(message.chat.id, "typing")
-
     file_name = str(int(time.time()))
-    media_file = media_processing.MediaFile(bot, message, file_name)
-    media_file.download_media()
-    file = media_file.prepare_file()
-    results = api_requests.ApiRequest(message.chat.id, file_name)
-    results = results.get_result(file)
-    send_results(results)
-    delete_media(message.chat.id, file_name)
+    try:
+        bot.send_chat_action(message.chat.id, "typing")
+
+        media_file = media_processing.MediaFile(bot, message, file_name)
+        media_file.download_media()
+        file = media_file.prepare_file()
+        results = api_requests.ApiRequest(message.chat.id, file_name)
+        results = results.get_result(file)
+        send_results(results)
+    except Exception as ex:
+        text = f"[{type(ex).__name__}] in msg_media(): {str(ex)}"
+        logger.error(text)
+    finally:
+        delete_media(message.chat.id, file_name)
 
 
 def delete_media(chat_id, filename):
