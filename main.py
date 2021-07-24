@@ -4,7 +4,6 @@
 import os
 import time
 import config
-import dbfuncs
 import logging
 from telebot import TeleBot, types
 
@@ -29,7 +28,6 @@ def cmd_start(message):
         )
 
     send_messages()
-    dbfuncs.update_user(message.chat.id, message.chat.username)
 
 
 @bot.message_handler(content_types=["photo"])
@@ -102,9 +100,6 @@ if __name__ == "__main__":
 
     logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
-
-    if not os.path.isfile(config.dbname):
-        dbfuncs.create_table()
 
     while True:
         try:
