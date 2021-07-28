@@ -33,12 +33,15 @@ def cmd_start(message):
 @bot.message_handler(content_types=["photo"])
 def msg_media(message):
     def send_results(result):
-        text_result = (
-            f"<b>{result['name']}</b>\n\n"
-            f"<b>Part:</b> {result['part']}\n"
-            f"<b>Year:</b> {result['year']}\n"
-            f"<b>Time:</b> {result['time']}\n"
-        )
+        text_result = ""
+        if result["name"]:
+            text_result += f"<b>{result['name']}</b>\n\n"
+        if result["part"]:
+            text_result += f"<b>Part:</b> {result['part']}\n"
+        if result["year"]:
+            text_result += f"<b>Year:</b> {result['year']}\n"
+        if result["time"]:
+            text_result += f"<b>Time:</b> {result['time']}\n"
 
         markup = types.InlineKeyboardMarkup()
         buttons = []

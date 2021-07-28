@@ -21,8 +21,6 @@ class MediaFile:
         ) as new_file:
             new_file.write(downloaded_file)
 
-        print(f"Media downloaded for [id:{self.message.chat.id}]")
-
     def check_folder(self, chat_id):
         if not os.path.isdir("media"):
             os.mkdir("media")
